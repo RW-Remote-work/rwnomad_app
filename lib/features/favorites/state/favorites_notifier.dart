@@ -2,21 +2,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/config/app_config.dart';
 import '../../../data/datasources/favorite_remote_source.dart';
 import '../../../data/models/job/paging_job_response.dart';
+import '../../auth/state/auth_notifier.dart';
 
 final favoritesProvider = StateNotifierProvider<FavoritesNotifier,
     AsyncValue<List<PagingJobResponse>>>((ref) {
-  return FavoritesNotifier(ref.read(favoriteRemoteSourceProvider));
+  final authState = ref.watch(authNotifierProvider);
+  return FavoritesNotifier(
+    ref.read(favoriteRemoteSourceProvider),
+    isLoggedIn: authState.isLoggedIn,
+  );
 });
 
 class FavoritesNotifier
     extends StateNotifier<AsyncValue<List<PagingJobResponse>>> {
   final FavoriteRemoteSource _remoteSource;
+  final bool isLoggedIn;
 
   int _currentPage = 0;
   int _totalPages = 1;
 
-  FavoritesNotifier(this._remoteSource) : super(const AsyncValue.loading()) {
-    loadFavorites();
+  FavoritesNotifier(this._remoteSource, {required this.isLoggedIn})
+      : super(isLoggedIn ? const AsyncValue.loading() : const AsyncValue.data([])) {
+    if (isLoggedIn) {
+      loadFavorites();
+    }
   }
 
   Future<void> loadFavorites() async {

@@ -2,11 +2,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/config/app_config.dart';
 import '../../../data/datasources/job_remote_source.dart';
 import '../../../data/models/job/paging_job_response.dart';
+import '../../auth/state/auth_notifier.dart';
 import 'job_filter_notifier.dart';
 
 final jobListProvider =
     StateNotifierProvider<JobListNotifier, AsyncValue<List<PagingJobResponse>>>(
         (ref) {
+  ref.watch(authNotifierProvider);
   return JobListNotifier(
     ref.read(jobRemoteSourceProvider),
     ref,

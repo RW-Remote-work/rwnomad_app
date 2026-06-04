@@ -305,7 +305,7 @@ class _JobCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        '${(job.matchScore! * 100).toInt()}%',
+                        '${job.matchScore!.toInt()}%',
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,

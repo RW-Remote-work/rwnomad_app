@@ -69,7 +69,6 @@ class _JobDetailPageState extends ConsumerState<JobDetailPage> {
       final source = ref.read(jobRemoteSourceProvider);
       await source.applyJob(widget.jobId);
       if (!mounted) return;
-      Fluttertoast.showToast(msg: 'applySuccess'.tr());
       _showDeliveryInfo();
     } catch (_) {
       if (!mounted) return;
