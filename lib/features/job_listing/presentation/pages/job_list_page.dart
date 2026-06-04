@@ -30,21 +30,33 @@ class JobListPage extends ConsumerStatefulWidget {
   ConsumerState<JobListPage> createState() => _JobListPageState();
 }
 
-class _JobListPageState extends ConsumerState<JobListPage> {
+class _JobListPageState extends ConsumerState<JobListPage> with WidgetsBindingObserver {
   final _scrollController = ScrollController();
   final _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final jobState = ref.read(jobListProvider);
+      if (jobState.hasError) {
+        ref.read(jobListProvider.notifier).refresh();
+      }
+    }
   }
 
   void _onScroll() {
