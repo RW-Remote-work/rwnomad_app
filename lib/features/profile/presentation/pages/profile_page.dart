@@ -122,6 +122,13 @@ class ProfilePage extends ConsumerWidget {
                   if (isLoggedIn) ...[
                     const Divider(height: 1, indent: 56),
                     _MenuItem(
+                      icon: Icons.delete_forever_outlined,
+                      title: 'deleteAccount'.tr(),
+                      onTap: () => _showDeleteAccountDialog(context, ref),
+                      textColor: Colors.red,
+                    ),
+                    const Divider(height: 1, indent: 56),
+                    _MenuItem(
                       icon: Icons.logout,
                       title: 'logOut'.tr(),
                       onTap: () => _showLogoutDialog(context, ref),
@@ -164,6 +171,33 @@ class ProfilePage extends ConsumerWidget {
               }
             },
             child: Text('logOut'.tr(),
+                style: const TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteAccountDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('confirmDeleteAccount'.tr()),
+        content: Text('deleteAccountDescription'.tr()),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text('cancel'.tr()),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await ref.read(authNotifierProvider.notifier).deleteAccount();
+              if (context.mounted) {
+                context.go('/login');
+              }
+            },
+            child: Text('deleteAccount'.tr(),
                 style: const TextStyle(color: Colors.red)),
           ),
         ],

@@ -62,6 +62,10 @@ class AuthRemoteSource {
     return UserProfile.fromJson(response.data);
   }
 
+  Future<void> deleteAccount() async {
+    await _dio.delete(ApiEndpoints.deleteAccount);
+  }
+
   Future<String> uploadAvatar(String filePath) async {
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath, filename: 'avatar.jpg'),

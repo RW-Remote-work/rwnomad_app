@@ -15,6 +15,7 @@ class ApiEndpoints {
   static const String updateDisplayName = '/web/users/display-name';
   static const String updateAvatarUrl = '/web/users/avatar-url';
   static const String updateAvatar = '/web/users/avatar';
+  static const String deleteAccount = '/web/users';
 
   // Jobs
   static const String jobList = '/web/jobs/list';
